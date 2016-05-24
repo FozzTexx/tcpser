@@ -386,8 +386,8 @@ int mdm_parse_cmd(modem_config *cfg)
         strncpy(cfg->dialno, cfg->last_dialno, strlen(cfg->last_dialno));
         cfg->dial_type = cfg->dial_type;
         cfg->memory_dial = TRUE;
-        mdm_write(cfg, cfg->crlf, 2);
-        mdm_write(cfg, cfg->dialno, strlen(cfg->dialno));
+        mdm_write_parity(cfg, cfg->crlf, 2);
+        mdm_write_parity(cfg, cfg->dialno, strlen(cfg->dialno));
       }
       else {
         cfg->dialno[0] = 0;
@@ -474,7 +474,7 @@ int mdm_parse_cmd(modem_config *cfg)
       break;
     case AT_CMD_FLAG_QUERY | 'S':
       sprintf(tmp, "%s%3.3d", cfg->crlf, cfg->s[num]);
-      mdm_write(cfg, tmp, strlen(tmp));
+      mdm_write_parity(cfg, tmp, strlen(tmp));
       break;
     case 'T':  // defaut to tone dialing
       //cfg->default_dial_type=MDM_DT_TONE;
@@ -573,7 +573,7 @@ int mdm_handle_char(modem_config *cfg, char ch)
   if (cfg->cmd_started == TRUE) {
     if (ch == (char) (cfg->s[5])) {
       if (cfg->cur_line_idx == 0 && cfg->echo == TRUE) {
-        mdm_write_char(cfg, 'T');
+        mdm_write_parity(cfg, "T", 1);
       }
       else {
         cfg->cur_line_idx--;

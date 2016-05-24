@@ -15,7 +15,6 @@ int line_init_config(modem_config *cfg)
   return 0;
 }
 
-
 int line_write(modem_config *cfg, char *data, int len)
 {
   int retval;
@@ -23,6 +22,7 @@ int line_write(modem_config *cfg, char *data, int len)
   int double_iac = FALSE;
   char text[1024];
   int text_len = 0;
+
 
   if (cfg->line_data.is_telnet && cfg->line_data.nvt_data.binary_xmit) {
     retval = 0;
@@ -55,7 +55,6 @@ int line_write(modem_config *cfg, char *data, int len)
   return ip_write(cfg->line_data.fd, data, len);
 }
 
-
 int line_listen(modem_config *cfg)
 {
   return 0;
@@ -66,10 +65,10 @@ int line_off_hook(modem_config *cfg)
   return 0;
 }
 
-
 int line_connect(modem_config *cfg)
 {
   char *addy = cfg->dialno;
+
 
   LOG(LOG_INFO, "Connecting");
   addy = pb_search(addy);
@@ -85,7 +84,6 @@ int line_connect(modem_config *cfg)
     return -1;
   }
 }
-
 
 int line_disconnect(modem_config *cfg)
 {

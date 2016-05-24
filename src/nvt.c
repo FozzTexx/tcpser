@@ -71,13 +71,13 @@ int parse_nvt_subcommand(int fd, nvt_vars *vars, char *data, int len)
       }
   }
 
-  if (rc > 5 && (NVT_SB_SEND == data[4])) {
+  if (rc > 5 && (NVT_SB_SEND == data[3])) {
     switch (opt) {
     case NVT_OPT_TERMINAL_TYPE:
-    case NVT_OPT_X_DISPLAY_LOCATION:   // should not have to have these
-    case NVT_OPT_ENVIRON:      // but telnet seems to expect.
-    case NVT_OPT_NEW_ENVIRON:  // them.
     case NVT_OPT_TERMINAL_SPEED:
+    case NVT_OPT_X_DISPLAY_LOCATION:   // should not have to have these
+    case NVT_OPT_ENVIRON:	       // but telnet seems to expect.
+    case NVT_OPT_NEW_ENVIRON:	       // them.
       response[response_len++] = NVT_SB_IS;
       switch (opt) {
       case NVT_OPT_TERMINAL_TYPE:
@@ -148,14 +148,15 @@ int parse_nvt_command(int fd, nvt_vars *vars, char action, int opt)
 
   case NVT_OPT_NAWS:
   case NVT_OPT_TERMINAL_TYPE:
+  case NVT_OPT_TERMINAL_SPEED:
   case NVT_OPT_SUPPRESS_GO_AHEAD:
   case NVT_OPT_ECHO:
   case NVT_OPT_X_DISPLAY_LOCATION:     // should not have to have these
-  case NVT_OPT_ENVIRON:        // but telnet seems to expect.
-  case NVT_OPT_NEW_ENVIRON:    // them.
-  case NVT_OPT_TERMINAL_SPEED:
+  case NVT_OPT_ENVIRON:		       // but telnet seems to expect.
+  case NVT_OPT_NEW_ENVIRON:	       // them.
     resp[1] = get_nvt_cmd_response(action, TRUE);
     break;
+
   default:
     resp[1] = get_nvt_cmd_response(action, FALSE);
     break;
