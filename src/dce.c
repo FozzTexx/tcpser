@@ -8,13 +8,10 @@
 #include "ip232.h"      // needs modem_core.h
 #include "dce.h"
 
-
-
 int dce_init_config(modem_config *cfg)
 {
   return 0;
 }
-
 
 int dce_init_conn(modem_config *cfg)
 {
@@ -32,7 +29,6 @@ int dce_init_conn(modem_config *cfg)
   LOG_EXIT();
   return rc;
 }
-
 
 int dce_set_flow_control(modem_config *cfg, int opts)
 {
@@ -137,7 +133,6 @@ int dce_check_control_lines(modem_config *cfg)
   LOG_EXIT();
   return new_status;
 }
-
 
 int dce_write(modem_config *cfg, char data[], int len)
 {
