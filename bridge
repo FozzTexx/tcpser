@@ -1,0 +1,2 @@
+tcpser-1.0rc10/tcpser -d /dev/ttyS1 -s 1200 -i"e0" -tsS -n"5551212=ltshosting.net:5190"
+

@@ -1,0 +1,43 @@
+1.0
+  Initial release
+1.0rc2
+  Cleaned up code
+10.rc3
+  changed char fields to unsigned char
+  Changed many functions to return status
+  Added macros for __FUNCTION__ keyword, for compiler sanity
+  Added include headers needed for other UNIX platforms
+1.0rc4
+  Changed cfg->connection to cfg->conn_type
+  Added support for send file text to connections on actions
+  If data received while off-hook and no conn, go on-hook.
+  Clean up parseRegister action in getcmd.c
+  Add support for ':' and '-' extended commands
+  Cleaned up functions to only exit at one point
+1.0rc5
+  Moved includes to be in correct order
+  Fixed Q0 and Q1 (they were reversed)
+1.0rc6
+  Add support for direct connection
+1.0rc7
+  Fixed mislocated tcsetattr in serial.com:ser_init_conn
+1.0rc8
+  Fixed bug in ip_thread (calling a null number would turn on ip_thread, but no connection, generating a dump
+  Fixed bugs in dce_set_flow_control
+  Fixed behavior of parms parsing for &Z (complex) and S (simple)
+  Defaulted code to not assume /dev/ttyS0 as serport
+1.0rc9
+  Fixed bug that would stop first session if second call came in
+  Fixed outbound call not bringing DCD high.
+1.0rc10
+  Added some more debugging information
+  Changed logging to go to stdout from stderr
+  Fixed Phone book matching function to use logger
+1.0rc11
+  Added ip232 support with custom protocol for use with matching modified version of WinVICE 1.19
+  Added full support for Telnet Binary Transmission (RFC 856)
+1.0rc12
+  Added code to hook SIG_IO to SIG_IGN.  Newer versions of Linux are terminating when IO arrives.
+
+1.0fz1 - Chris Osborn <fozztexx@fozztexx.com> 2016-May-24
+  Strip parity when looking for commands, generate matching parity on modem responses
