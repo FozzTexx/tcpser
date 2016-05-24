@@ -42,3 +42,4 @@
 1.0fz1 - Chris Osborn <fozztexx@fozztexx.com> 2016-May-24
   Cleaned up all the warnings about unsigned char strings
   Strip parity when looking for commands, generate matching parity on modem responses
+  Fixed bug in sending telnet sub-options. Now tcpser can connect to real telnet servers.
