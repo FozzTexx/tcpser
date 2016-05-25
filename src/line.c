@@ -76,6 +76,14 @@ int line_connect(modem_config *cfg)
   if (cfg->line_data.fd > -1) {
     LOG(LOG_ALL, "Connected to %s", addy);
     cfg->line_data.valid_conn = TRUE;
+    /* we need to let the other end know that our end will
+     * handle the echo - otherwise "true" telnet clients like
+     * those that come with Linux & Windows will echo characters
+     * typed and you'll end up with doubled characters if the remote
+     * host is echoing as well...
+     * - gwb
+     */
+    send_nvt_command(cfg->line_data.fd, &cfg->line_data.nvt_data, NVT_WILL, NVT_OPT_ECHO);
     return 0;
   }
   else {

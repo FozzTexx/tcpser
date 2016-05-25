@@ -40,9 +40,8 @@ void print_help(char *name)
   exit(1);
 }
 
-int init(int argc,
-         char **argv,
-         modem_config cfg[], int max_modem, int *port, char *all_busy, int all_busy_len)
+int init(int argc, char **argv, modem_config cfg[], int max_modem, char **ip_addr,
+	 int *port, char *all_busy, int all_busy_len)
 {
   int i = 0;
   int j = 0;
@@ -110,7 +109,12 @@ int init(int argc,
       cfg[i].invert_dcd = TRUE;
       break;
     case 'p':
-      *port = (atoi(optarg));
+      if (strstr(optarg, ":") > 0) {
+	*ip_addr = strtok(optarg, ":");
+	*port = (atoi(strtok(NULL,":")));
+      }
+      else
+	*port = (atoi(optarg));
       break;
     case 'n':
       tok = strtok(optarg, "=");

@@ -11,7 +11,7 @@
 
 const int BACK_LOG = 5;
 
-int ip_init_server_conn(int port)
+int ip_init_server_conn(char *ip_addr, int port)
 {
   int sSocket = 0, on = 0, rc = 0;
   struct sockaddr_in serverName = { 0 };
@@ -31,7 +31,7 @@ int ip_init_server_conn(int port)
      * turn off bind address checking, and allow 
      * port numbers to be reused - otherwise
      * the TIME_WAIT phenomenon will prevent 
-     * binding to these addreG.
+     * binding to these addresses.
      */
 
     on = 1;
@@ -42,11 +42,16 @@ int ip_init_server_conn(int port)
       ELOG(LOG_ERROR, "bind address checking could not be turned off");
     }
 
-    serverName.sin_addr.s_addr = htonl(INADDR_ANY);
+    if (ip_addr != NULL) /* gwb */
+      serverName.sin_addr.s_addr = inet_addr(ip_addr);
+    else 
+      serverName.sin_addr.s_addr = htonl(INADDR_ANY);
     serverName.sin_family = AF_INET;
 
     /* network-order */
     serverName.sin_port = htons(port);
+    if (ip_addr != NULL ) /* gwb */
+      LOG(LOG_DEBUG, "Using specified ip address %s", ip_addr);
 
     LOG(LOG_DEBUG, "Binding server socket to port %d", port);
     rc = bind(sSocket, (struct sockaddr *) &serverName, sizeof(serverName)
