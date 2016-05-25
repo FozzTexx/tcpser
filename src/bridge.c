@@ -78,14 +78,15 @@ int parse_ip_data(modem_config *cfg, char *data, int len)
         case NVT_DONT:
           /// again, overflow issues...
           LOG(LOG_INFO, "Parsing nvt command");
-          parse_nvt_command(cfg->line_data.fd, &cfg->line_data.nvt_data, ch, data[i + 2]);
+          parse_nvt_command(cfg->line_data.fd, &cfg->line_data.nvt_data, ch,
+			    data[i + 2], cfg->parity);
           i += 3;
           break;
         case NVT_SB:   // sub negotiation
           // again, overflow...
           i +=
-            parse_nvt_subcommand(cfg->line_data.fd, &cfg->line_data.nvt_data, data + i,
-                                 len - i);
+            parse_nvt_subcommand(cfg->line_data.fd, &cfg->line_data.nvt_data,
+				 data + i, len - i, cfg->dce_speed);
           break;
         case NVT_IAC:
           if (cfg->line_data.nvt_data.binary_recv)
