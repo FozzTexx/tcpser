@@ -385,7 +385,6 @@ void *run_bridge(void *arg)
         }
         else
           mdm_send_ring(cfg);
-
       }
       else
         mdm_handle_timeout(cfg);

@@ -178,14 +178,7 @@ void mdm_write_char(modem_config *cfg, char data)
   mdm_write(cfg, str, 1);
 }
 
-void mdm_write(modem_config *cfg, char data[], int len)
-{
-  if (cfg->allow_transmit == TRUE) {
-    dce_write(cfg, data, len);
-  }
-}
-
-void mdm_write_parity(modem_config *cfg, char *data, int len)
+void mdm_write(modem_config *cfg, char *data, int len)
 {
   unsigned char *buf;
   int i;
@@ -193,17 +186,22 @@ void mdm_write_parity(modem_config *cfg, char *data, int len)
 
   
   if (cfg->allow_transmit == TRUE) {
-    buf = malloc(len);
-    memcpy(buf, data, len);
+    if (cfg->parity) {
+      buf = malloc(len);
+      memcpy(buf, data, len);
 
-    for (i = 0; i < len; i++) {
-      v = buf[i];
-      v = (((v * 0x0101010101010101ULL) & 0x8040201008040201ULL) % 0x1FF) & 1;
-      buf[i] |= (((cfg->parity >> !v)) & 1) << 7;
-    }
+      for (i = 0; i < len; i++) {
+	v = buf[i];
+	v = (((v * 0x0101010101010101ULL) & 0x8040201008040201ULL) % 0x1FF) & 1;
+	buf[i] &= 0x7f;
+	buf[i] |= (((cfg->parity >> !v)) & 1) << 7;
+      }
     
-    mdm_write(cfg, (char *) buf, len);
-    free(buf);
+      dce_write(cfg, (char *) buf, len);
+      free(buf);
+    }
+    else
+      dce_write(cfg, data, len);
   }
 }
 
@@ -214,17 +212,17 @@ void mdm_send_response(int msg, modem_config *cfg)
 
   LOG(LOG_DEBUG, "Sending %s response to modem", mdm_responses[msg]);
   if (cfg->send_responses == TRUE) {
-    mdm_write_parity(cfg, cfg->crlf, 2);
+    mdm_write(cfg, cfg->crlf, 2);
     if (cfg->text_responses == TRUE) {
       LOG(LOG_ALL, "Sending text response");
-      mdm_write_parity(cfg, mdm_responses[msg], strlen(mdm_responses[msg]));
+      mdm_write(cfg, mdm_responses[msg], strlen(mdm_responses[msg]));
     }
     else {
       LOG(LOG_ALL, "Sending numeric response");
       sprintf(msgID, "%d", msg);
-      mdm_write_parity(cfg, msgID, strlen(msgID));
+      mdm_write(cfg, msgID, strlen(msgID));
     }
-    mdm_write_parity(cfg, cfg->crlf, 2);
+    mdm_write(cfg, cfg->crlf, 2);
   }
 }
 
@@ -389,8 +387,8 @@ int mdm_parse_cmd(modem_config *cfg)
         strncpy(cfg->dialno, cfg->last_dialno, strlen(cfg->last_dialno));
         cfg->dial_type = cfg->dial_type;
         cfg->memory_dial = TRUE;
-        mdm_write_parity(cfg, cfg->crlf, 2);
-        mdm_write_parity(cfg, cfg->dialno, strlen(cfg->dialno));
+        mdm_write(cfg, cfg->crlf, 2);
+        mdm_write(cfg, cfg->dialno, strlen(cfg->dialno));
       }
       else {
         cfg->dialno[0] = 0;
@@ -477,7 +475,7 @@ int mdm_parse_cmd(modem_config *cfg)
       break;
     case AT_CMD_FLAG_QUERY | 'S':
       sprintf(tmp, "%s%3.3d", cfg->crlf, cfg->s[num]);
-      mdm_write_parity(cfg, tmp, strlen(tmp));
+      mdm_write(cfg, tmp, strlen(tmp));
       break;
     case 'T':  // defaut to tone dialing
       //cfg->default_dial_type=MDM_DT_TONE;
@@ -576,7 +574,7 @@ int mdm_handle_char(modem_config *cfg, char ch)
   if (cfg->cmd_started == TRUE) {
     if (ch == (char) (cfg->s[5])) {
       if (cfg->cur_line_idx == 0 && cfg->echo == TRUE) {
-        mdm_write_parity(cfg, "T", 1);
+        mdm_write(cfg, "T", 1);
       }
       else {
         cfg->cur_line_idx--;
@@ -631,6 +629,7 @@ int mdm_clear_break(modem_config *cfg)
 int mdm_parse_data(modem_config *cfg, char *data, int len)
 {
   int i;
+  int ch;
 
 
   if (cfg->cmd_mode == TRUE) {
@@ -642,7 +641,10 @@ int mdm_parse_data(modem_config *cfg, char *data, int len)
     line_write(cfg, data, len);
     if (cfg->pre_break_delay == TRUE) {
       for (i = 0; i < len; i++) {
-        if (data[i] == (char) cfg->s[2]) {
+	ch = data[i];
+	if (cfg->parity)
+	  ch &= 0x7f;
+        if (ch == (char) cfg->s[2]) {
           LOG(LOG_DEBUG, "Break character received");
           cfg->break_len++;
           if (cfg->break_len > 3) {     // more than 3, considered invalid
