@@ -23,9 +23,10 @@ int line_write(modem_config *cfg, char *data, int len)
   char text[1024];
   int text_len = 0;
   int mask = 0x7f;
+  int ch;
 
 
-  if (cfg->line_data.is_telnet) {
+  if (cfg->line_data.is_telnet || cfg->parity) {
     if (cfg->line_data.nvt_data.binary_xmit)
       mask = 0xff;
     
@@ -37,12 +38,14 @@ int line_write(modem_config *cfg, char *data, int len)
         i++;
       }
       else {
-        if (NVT_IAC == data[i]) {
+	ch = data[i] & mask;
+        if (NVT_IAC == ch) {
           text[text_len++] = NVT_IAC;
           double_iac = TRUE;
         }
         else {
-          text[text_len++] = data[i++] & mask;
+          text[text_len++] = ch;
+	  i++;
         }
       }
       if (text_len == sizeof(text_len)) {
