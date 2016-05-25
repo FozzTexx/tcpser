@@ -47,7 +47,6 @@ int accept_connection(modem_config *cfg)
   return 0;
 }
 
-
 int parse_ip_data(modem_config *cfg, char *data, int len)
 {
   // I'm going to cheat and assume it comes in chunks.
@@ -55,6 +54,7 @@ int parse_ip_data(modem_config *cfg, char *data, int len)
   char ch;
   char text[1025];
   int text_len = 0;
+
 
   if (cfg->line_data.first_char == TRUE) {
     cfg->line_data.first_char = FALSE;
@@ -182,6 +182,7 @@ void *ctrl_thread(void *arg)
   int status;
   int new_status;
 
+
   LOG_ENTER();
 
   status = dce_get_control_lines(cfg);
@@ -207,7 +208,6 @@ void *ctrl_thread(void *arg)
   exit(-1);
 }
 
-
 int spawn_ctrl_thread(modem_config *cfg)
 {
   int rc;
@@ -227,6 +227,7 @@ int spawn_ip_thread(modem_config *cfg)
 {
   int rc;
   pthread_t thread_id;
+
 
   rc = pthread_create(&thread_id, NULL, ip_thread, (void *) cfg);
   LOG(LOG_ALL, "IP thread ID=%d", (int) thread_id);

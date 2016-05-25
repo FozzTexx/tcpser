@@ -49,7 +49,6 @@
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #endif
 
-
 typedef struct line_config {
   int valid_conn;
   int fd;

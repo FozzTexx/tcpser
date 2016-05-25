@@ -26,6 +26,7 @@ void *ip232_thread(void *arg)
   int max_fd = 0;
   int cSocket;
 
+
   LOG_ENTER();
   for (;;) {
     FD_ZERO(&readfs);
@@ -71,8 +72,8 @@ void *ip232_thread(void *arg)
 int spawn_ip232_thread(modem_config *cfg)
 {
   int rc;
-
   pthread_t thread_id;
+
 
   rc = pthread_create(&thread_id, NULL, ip232_thread, (void *) cfg);
   LOG(LOG_ALL, "ip232 thread ID=%d", (int) thread_id);
@@ -87,6 +88,7 @@ int ip232_init_conn(modem_config *cfg)
 {
   int rc = -1;
   int port;
+
 
   LOG_ENTER();
   LOG(LOG_INFO, "Opening ip232 device");
@@ -122,6 +124,7 @@ int ip232_get_control_lines(modem_config *cfg)
 {
   int status = 0;
 
+
   if (cfg->dce_data.ip232_is_connected && cfg->dce_data.ip232_dtr) {
     status |= TIOCM_DSR;
   }
@@ -132,6 +135,7 @@ int ip232_set_control_lines(modem_config *cfg, int state)
 {
   int dcd;
   char cmd[2];
+
 
   if (cfg->dce_data.ip232_is_connected) {
     dcd = (state & TIOCM_DTR) ? TRUE : FALSE;
@@ -152,6 +156,7 @@ int ip232_write(modem_config *cfg, char *data, int len)
   int double_iac = FALSE;
   char text[1024];
   int text_len = 0;
+
 
   log_trace(TRACE_MODEM_OUT, data, len);
   retval = len;
@@ -191,6 +196,7 @@ int ip232_read(modem_config *cfg, char *data, int len)
   int i = 0;
   char ch;
   int text_len = 0;
+
 
   LOG_ENTER();
   if (len > sizeof(buf)) {
@@ -237,7 +243,6 @@ int ip232_read(modem_config *cfg, char *data, int len)
     }
   }
   else {
-
     // not connected
     res = read(cfg->dce_data.dp[0][0], buf, sizeof(buf));
     switch (buf[0]) {
@@ -254,6 +259,7 @@ int ip232_read(modem_config *cfg, char *data, int len)
       break;
     }
   }
+
   LOG_EXIT();
   return text_len;
 }

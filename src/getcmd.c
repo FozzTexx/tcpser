@@ -4,11 +4,12 @@
 
 #include "getcmd.h"
 
-int getData(char line[], int *index, int len, int *data_start, int *data_end, int complex_parse)
+int getData(char line[], int *index, int len, int *data_start, int *data_end,
+	    int complex_parse)
 {
-
   int alpha = FALSE;
   int done = FALSE;
+
 
   *data_start = *index;
 
@@ -68,6 +69,7 @@ int getNumber(char line[], int *index, int len)
   int num = 0;
   int found = FALSE;
 
+
   while (*index < len && 0 != isdigit(line[*index])) {
     num = num * 10 + line[(*index)++] - '0';
     found = 1;
@@ -76,7 +78,6 @@ int getNumber(char line[], int *index, int len)
     return -1;
   return num;
 }
-
 
 int skip(char line[], int *index, int len, char ch)
 {
@@ -90,20 +91,20 @@ int getCommand(char line[], int flags, int *index, int *num, int len)
 {
   int cmd = line[(*index)++];
 
+
   *num = getNumber(line, index, len);
   return cmd;
 }
-
 
 int parseCommand(char line[], int flags, int *index, int *num, int len)
 {
   int cmd = getCommand(line, flags, index, num, len);
 
+
   if (0 < cmd && 0 > *num)
     *num = 0;
   return toupper(cmd) | flags;
 }
-
 
 int parseRegister(char line[],
                   int flags,
@@ -111,8 +112,8 @@ int parseRegister(char line[],
                   int *num, int len, int *data_start, int *data_end, int complex_parse)
 {
   // need to handle S<num>?, which queries that S register.
-
   int cmd = 0;
+
 
   cmd = getCommand(line, flags, index, num, len);
   if (0 > num)
@@ -136,6 +137,7 @@ int parseRegister(char line[],
   default:
     return AT_CMD_ERR;
   }
+
   return toupper(cmd) | flags;
 }
 
@@ -143,6 +145,7 @@ int getcmd(char line[], int *index, int *num, int *data_start, int *data_end)
 {
   int len = 0;
   int cmd = AT_CMD_END;
+
 
   *num = 0;
   *data_start = 0;
@@ -267,9 +270,11 @@ int main_getcmd(int argc, char **argv)
   int index = 0, num = 0, start = 0, end = 0;
   int cmd = 0;
 
+
   while (cmd != AT_CMD_END) {
     cmd = getcmd(data, &index, &num, &start, &end);
     printf("Cmd: %c Index: %d Num: %d Start: %d End: %d\n", cmd, index, num, start, end);
   }
+
   return 0;
 }

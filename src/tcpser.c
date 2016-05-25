@@ -17,7 +17,6 @@
 
 const char MDM_BUSY[] = "BUSY\n";
 
-
 int main(int argc, char *argv[])
 {
   modem_config cfg[64];

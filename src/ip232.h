@@ -15,5 +15,4 @@ int ip232_set_control_lines(modem_config *, int state);
 int ip232_write(modem_config *, char *data, int len);
 int ip232_read(modem_config *, char *data, int len);
 
-
 #endif /*  */

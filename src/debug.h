@@ -28,7 +28,6 @@
 #endif
 #endif
 
-
 #define LOG(a,args...) do { \
                          if(a <= log_level) { \
                            log_start(a); \

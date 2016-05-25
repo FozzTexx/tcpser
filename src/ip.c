@@ -9,13 +9,13 @@
 #include "debug.h"
 #include "ip.h"
 
-
 const int BACK_LOG = 5;
 
 int ip_init_server_conn(int port)
 {
   int sSocket = 0, on = 0, rc = 0;
   struct sockaddr_in serverName = { 0 };
+
 
   LOG_ENTER();
 
@@ -70,8 +70,6 @@ int ip_init_server_conn(int port)
   return sSocket;
 }
 
-
-
 int ip_connect(char addy[])
 {
   struct sockaddr_in pin;
@@ -81,6 +79,7 @@ int ip_connect(char addy[])
   int port = 23;
   char *address;
   char *tmp;
+
 
   LOG_ENTER();
 
@@ -131,6 +130,7 @@ int ip_accept(int sSocket)
   socklen_t clientLength = sizeof(clientName);
   int cSocket = -1;
 
+
   LOG_ENTER();
 
   (void) memset(&clientName, 0, sizeof(clientName));
@@ -168,6 +168,7 @@ int ip_write(int fd, char *data, int len)
 int ip_read(int fd, char *data, int len)
 {
   int res;
+
 
   res = recv(fd, data, len, 0);
   log_trace(TRACE_IP_IN, data, res);

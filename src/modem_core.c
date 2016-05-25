@@ -33,7 +33,6 @@ int mdm_init()
   return 0;
 }
 
-
 int get_connect_response(int speed, int level)
 {
   if (level == 0) {
@@ -65,6 +64,7 @@ int get_connect_response(int speed, int level)
 void mdm_init_config(modem_config *cfg)
 {
   int i = 0;
+
 
   cfg->send_responses = TRUE;
   cfg->connect_response = 0;
@@ -155,6 +155,7 @@ int mdm_set_control_lines(modem_config *cfg)
   int state = 0;
   int up = (cfg->conn_type == MDM_CONN_NONE ? FALSE : TRUE);
 
+
   state |= get_new_cts_state(cfg, up);
   state |= get_new_dsr_state(cfg, up);
   state |= get_new_dcd_state(cfg, up);
@@ -171,6 +172,7 @@ int mdm_set_control_lines(modem_config *cfg)
 void mdm_write_char(modem_config *cfg, char data)
 {
   char str[2];
+
 
   str[0] = data;
   mdm_write(cfg, str, 1);
@@ -209,6 +211,7 @@ void mdm_send_response(int msg, modem_config *cfg)
 {
   char msgID[17];
 
+
   LOG(LOG_DEBUG, "Sending %s response to modem", mdm_responses[msg]);
   if (cfg->send_responses == TRUE) {
     mdm_write_parity(cfg, cfg->crlf, 2);
@@ -227,7 +230,6 @@ void mdm_send_response(int msg, modem_config *cfg)
 
 int mdm_off_hook(modem_config *cfg)
 {
-
   LOG(LOG_INFO, "taking modem off hook");
   cfg->off_hook = TRUE;
   cfg->cmd_mode = FALSE;
@@ -257,6 +259,7 @@ int mdm_answer(modem_config *cfg)
 int mdm_print_speed(modem_config *cfg)
 {
   int speed;
+
 
   switch (cfg->connect_response) {
   case 2:
@@ -288,16 +291,15 @@ int mdm_connect(modem_config *cfg)
   return 0;
 }
 
-
 int mdm_listen(modem_config *cfg)
 {
   return line_listen(cfg);
 }
 
-
 int mdm_disconnect(modem_config *cfg)
 {
   int type;
+
 
   LOG_ENTER();
   LOG(LOG_INFO, "Disconnecting modem");
@@ -334,6 +336,7 @@ int mdm_parse_cmd(modem_config *cfg)
   int cmd = AT_CMD_NONE;
   char *command = cfg->cur_line;
   char tmp[256];
+
 
   LOG_ENTER();
 
@@ -628,6 +631,7 @@ int mdm_clear_break(modem_config *cfg)
 int mdm_parse_data(modem_config *cfg, char *data, int len)
 {
   int i;
+
 
   if (cfg->cmd_mode == TRUE) {
     for (i = 0; i < len; i++) {

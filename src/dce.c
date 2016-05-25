@@ -17,6 +17,7 @@ int dce_init_conn(modem_config *cfg)
 {
   int rc;
 
+
   LOG_ENTER();
   if (cfg->dce_data.is_ip232) {
     rc = ip232_init_conn(cfg);
@@ -34,6 +35,7 @@ int dce_set_flow_control(modem_config *cfg, int opts)
 {
   int status = 0;
   int rc = 0;
+
 
   LOG_ENTER();
   if (opts == 0) {
@@ -65,6 +67,7 @@ int dce_set_control_lines(modem_config *cfg, int state)
 {
   int status = 0;
   int rc;
+
 
   LOG_ENTER();
   if ((state & MDM_CL_CTS_HIGH) != 0) {
@@ -100,6 +103,7 @@ int dce_get_control_lines(modem_config *cfg)
   int status;
   int rc_status;
 
+
   if (cfg->dce_data.is_ip232) {
     status = ip232_get_control_lines(cfg);
   }
@@ -121,6 +125,7 @@ int dce_check_control_lines(modem_config *cfg)
 {
   int status = 0;
   int new_status = 0;
+
 
   LOG_ENTER();
   status = dce_get_control_lines(cfg);

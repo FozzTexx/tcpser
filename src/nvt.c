@@ -8,6 +8,7 @@ int nvt_init_config(nvt_vars *vars)
 {
   int i;
 
+
   vars->binary_xmit = FALSE;
   vars->binary_recv = FALSE;
   for (i = 0; i < 256; i++)
@@ -19,6 +20,7 @@ int nvt_init_config(nvt_vars *vars)
 char get_nvt_cmd_response(char action, char type)
 {
   char rc = 0;
+
 
   if (type == TRUE) {
     switch (action) {
@@ -63,6 +65,7 @@ int parse_nvt_subcommand(int fd, nvt_vars *vars, char *data, int len)
   int rc;
   int slen = 0;
 
+
   for (rc = 2; rc < len - 1; rc++) {
     if (NVT_IAC == data[rc])
       if (NVT_SE == data[rc + 1]) {
@@ -106,6 +109,7 @@ int send_nvt_command(int fd, nvt_vars *vars, char action, int opt)
 {
   char cmd[3];
 
+
   cmd[0] = NVT_IAC;
   cmd[1] = action;
   cmd[2] = opt;
@@ -116,10 +120,10 @@ int send_nvt_command(int fd, nvt_vars *vars, char action, int opt)
   return 0;
 }
 
-
 int parse_nvt_command(int fd, nvt_vars *vars, char action, int opt)
 {
   char resp[3];
+  
 
   resp[0] = NVT_IAC;
   resp[2] = opt;

@@ -52,6 +52,7 @@ int init(int argc,
   int dce_set = FALSE;
   int tty_set = FALSE;
 
+
   LOG_ENTER();
   *port = 6400;
   mdm_init_config(&cfg[0]);
