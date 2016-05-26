@@ -85,6 +85,20 @@ typedef struct dce_config {
   int ip232_iac;
 } dce_config;
 
+enum {
+  SRegisterBreak = 2,
+  SRegisterCR = 3,
+  SRegisterLF = 4,
+  SRegisterBackspace = 5,
+  SRegisterBlindWait = 6,
+  SRegisterCarrierWait = 7,
+  SRegisterCommaPause = 8,
+  SRegisterCarrierTime = 9,
+  SRegisterCarrierLoss = 10,
+  SRegisterDTMFTime = 11,
+  SRegisterGuardTime = 12,
+};
+
 typedef struct modem_config {
   // master configuration information
 

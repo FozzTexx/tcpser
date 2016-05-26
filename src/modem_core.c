@@ -80,20 +80,20 @@ void mdm_init_config(modem_config *cfg)
   for (i = 0; i < 100; i++) {
     cfg->s[i] = 0;
   }
-  cfg->s[2] = 43;
-  cfg->s[3] = 13;
-  cfg->s[4] = 10;
-  cfg->s[5] = 8;
-  cfg->s[6] = 2;
-  cfg->s[7] = 50;
-  cfg->s[8] = 2;
-  cfg->s[9] = 6;
-  cfg->s[10] = 14;
-  cfg->s[11] = 95;
-  cfg->s[12] = 50;
+  cfg->s[SRegisterBreak] = 43;
+  cfg->s[SRegisterCR] = 13;
+  cfg->s[SRegisterLF] = 10;
+  cfg->s[SRegisterBackspace] = 8;
+  cfg->s[SRegisterBlindWait] = 2;
+  cfg->s[SRegisterCarrierWait] = 50;
+  cfg->s[SRegisterCommaPause] = 2;
+  cfg->s[SRegisterCarrierTime] = 6;
+  cfg->s[SRegisterCarrierLoss] = 14;
+  cfg->s[SRegisterDTMFTime] = 95;
+  cfg->s[SRegisterGuardTime] = 50;
 
-  cfg->crlf[0] = cfg->s[3];
-  cfg->crlf[1] = cfg->s[4];
+  cfg->crlf[0] = cfg->s[SRegisterCR];
+  cfg->crlf[1] = cfg->s[SRegisterLF];
   cfg->crlf[2] = 0;
 
   cfg->dial_type = 0;
@@ -466,10 +466,10 @@ int mdm_parse_cmd(modem_config *cfg)
       cfg->s[num] = atoi(tmp);
       switch (num) {
       case 3:
-        cfg->crlf[0] = cfg->s[3];
+        cfg->crlf[0] = cfg->s[SRegisterCR];
         break;
       case 4:
-        cfg->crlf[1] = cfg->s[4];
+        cfg->crlf[1] = cfg->s[SRegisterLF];
         break;
       }
       break;
@@ -572,7 +572,7 @@ int mdm_handle_char(modem_config *cfg, char ch)
   if (cfg->echo == TRUE)
     mdm_write_char(cfg, (ch | parbit));
   if (cfg->cmd_started == TRUE) {
-    if (ch == (char) (cfg->s[5])) {
+    if (ch == (char) (cfg->s[SRegisterBackspace])) {
       if (cfg->cur_line_idx == 0 && cfg->echo == TRUE) {
         mdm_write(cfg, "T", 1);
       }
@@ -580,7 +580,7 @@ int mdm_handle_char(modem_config *cfg, char ch)
         cfg->cur_line_idx--;
       }
     }
-    else if (ch == (char) (cfg->s[3])) {
+    else if (ch == (char) (cfg->s[SRegisterCR])) {
       // we have a line, process.
       cfg->cur_line[cfg->cur_line_idx] = 0;
       strncpy(cfg->last_cmd, cfg->cur_line, sizeof(cfg->last_cmd) - 1);
@@ -644,7 +644,7 @@ int mdm_parse_data(modem_config *cfg, char *data, int len)
 	ch = data[i];
 	if (cfg->parity)
 	  ch &= 0x7f;
-        if (ch == (char) cfg->s[2]) {
+        if (ch == (char) cfg->s[SRegisterBreak]) {
           LOG(LOG_DEBUG, "Break character received");
           cfg->break_len++;
           if (cfg->break_len > 3) {     // more than 3, considered invalid
