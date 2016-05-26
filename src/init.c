@@ -9,6 +9,8 @@ void print_help(char *name)
 {
   fprintf(stderr, "Usage: %s <parameters>\n", name);
   fprintf(stderr, "  -p   port to listen on (defaults to 6400)\n");
+  fprintf(stderr, "               -- or -- \n");
+  fprintf(stderr, "  -p  ip_address:port to specify which ip address and port to listen on.\n");
   fprintf(stderr, "  -t   trace flags: (can be combined)\n");
   fprintf(stderr, "       's' = modem input\n");
   fprintf(stderr, "       'S' = modem output\n");
