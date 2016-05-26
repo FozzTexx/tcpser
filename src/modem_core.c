@@ -5,6 +5,8 @@
 #include "debug.h"
 #include "modem_core.h"
 
+#define gen_parity(v) (((((v) * 0x0101010101010101ULL) & 0x8040201008040201ULL) % 0x1FF) & 1)
+
 char *mdm_responses[37];
 
 int mdm_init()
@@ -169,13 +171,14 @@ int mdm_set_control_lines(modem_config *cfg)
   return 0;
 }
 
+/* Write single char bypassing parity generation since this mirrors input */
 void mdm_write_char(modem_config *cfg, char data)
 {
   char str[2];
 
 
   str[0] = data;
-  mdm_write(cfg, str, 1);
+  dce_write(cfg, str, 1);
 }
 
 void mdm_write(modem_config *cfg, char *data, int len)
@@ -191,10 +194,10 @@ void mdm_write(modem_config *cfg, char *data, int len)
       memcpy(buf, data, len);
 
       for (i = 0; i < len; i++) {
-	v = buf[i];
-	v = (((v * 0x0101010101010101ULL) & 0x8040201008040201ULL) % 0x1FF) & 1;
 	buf[i] &= 0x7f;
-	buf[i] |= (((cfg->parity >> !v)) & 1) << 7;
+	v = buf[i];
+	v = gen_parity(v);
+	buf[i] |= (((cfg->parity >> v)) & 1) << 7;
       }
     
       dce_write(cfg, (char *) buf, len);
@@ -562,6 +565,33 @@ int mdm_parse_cmd(modem_config *cfg)
   return cmd;
 }
 
+int detect_parity(modem_config *cfg)
+{
+  int parity, eobits;
+  int charA, charT, charCR;
+
+
+  charA = cfg->pchars[0];
+  charT = cfg->pchars[1];
+  charCR = cfg->pchars[2];
+  
+  parity = (charA & 0x80) >> 7;
+  parity |= (charT & 0x80) >> 6;
+  parity |= (charCR & 0x80) >> 5;
+
+  eobits = gen_parity(charA & 0x7f);
+  eobits |= gen_parity(charT & 0x7f) << 1;
+  eobits |= gen_parity(charCR & 0x7f) << 2;
+
+  if (parity == eobits)
+    return 2;
+
+  if (parity && (parity ^ eobits) == (parity | eobits))
+    return 1;
+
+  return parity & 0x3;
+}
+
 int mdm_handle_char(modem_config *cfg, char ch)
 {
   int parbit = ch & 0x80;
@@ -582,6 +612,8 @@ int mdm_handle_char(modem_config *cfg, char ch)
     }
     else if (ch == (char) (cfg->s[SRegisterCR])) {
       // we have a line, process.
+      cfg->pchars[2] = ch | parbit;
+      detect_parity(cfg);
       cfg->cur_line[cfg->cur_line_idx] = 0;
       strncpy(cfg->last_cmd, cfg->cur_line, sizeof(cfg->last_cmd) - 1);
       mdm_parse_cmd(cfg);
@@ -596,7 +628,7 @@ int mdm_handle_char(modem_config *cfg, char ch)
     if (ch == 't' || ch == 'T') {
       cfg->cmd_started = TRUE;
       LOG(LOG_ALL, "'T' parsed in serial stream, switching to command parse mode");
-      cfg->parity |= parbit >> 6;
+      cfg->pchars[1] = ch | parbit;
     }
     else if (ch == '/') {
       LOG(LOG_ALL, "'/' parsed in the serial stream, replaying last command");
@@ -604,7 +636,6 @@ int mdm_handle_char(modem_config *cfg, char ch)
       strncpy(cfg->cur_line, cfg->last_cmd, cfg->cur_line_idx);
       mdm_parse_cmd(cfg);
       cfg->cmd_started = FALSE;
-      cfg->parity |= parbit >> 6;
     }
     else if (ch != 'a' && ch != 'A') {
       cfg->found_a = FALSE;
@@ -614,7 +645,7 @@ int mdm_handle_char(modem_config *cfg, char ch)
   else if (ch == 'a' || ch == 'A') {
     LOG(LOG_ALL, "'A' parsed in serial stream");
     cfg->found_a = TRUE;
-    cfg->parity = parbit >> 7;
+    cfg->pchars[0] = ch | parbit;
   }
   return 0;
 }

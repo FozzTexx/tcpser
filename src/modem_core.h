@@ -145,6 +145,7 @@ typedef struct modem_config {
   int disconnect_delay;
   char crlf[3];
   int parity;
+  unsigned char pchars[3];
 } modem_config;
 
 int mdm_init(void);
@@ -153,7 +154,6 @@ int get_new_cts_state(modem_config *cfg, int up);
 int get_new_dsr_state(modem_config *cfg, int up);
 int get_new_dcd_state(modem_config *cfg, int up);
 int mdm_set_control_lines(modem_config *cfg);
-void mdm_write_char(modem_config *cfg, char data);
 void mdm_write(modem_config *cfg, char data[], int len);
 void mdm_send_response(int msg, modem_config *cfg);
 int mdm_off_hook(modem_config *cfg);
