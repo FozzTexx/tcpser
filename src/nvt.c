@@ -17,7 +17,7 @@ int nvt_init_config(nvt_vars *vars)
   return 0;
 }
 
-char get_nvt_cmd_response(char action, char type)
+int get_nvt_cmd_response(int action, int type)
 {
   char rc = 0;
 

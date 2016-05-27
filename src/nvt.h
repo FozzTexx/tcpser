@@ -48,7 +48,7 @@ typedef struct nvt_vars {
   char term[256];
 } nvt_vars;
 
-extern char get_nvt_cmd_response(char action, char type);
+extern int get_nvt_cmd_response(int action, int type);
 extern int parse_nvt_subcommand(int fd, nvt_vars *vars, char *data, int len, int speed);
 extern int parse_nvt_command(int fd, nvt_vars *vars, nvtCommand action, nvtOption opt, int parity);
 extern int nvt_init_config(nvt_vars *vars);

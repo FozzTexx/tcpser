@@ -194,7 +194,7 @@ int ip232_read(modem_config *cfg, char *data, int len)
   int rc;
   char buf[256];
   int i = 0;
-  char ch;
+  int ch;
   int text_len = 0;
 
 

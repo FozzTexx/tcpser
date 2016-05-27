@@ -51,7 +51,7 @@ int parse_ip_data(modem_config *cfg, char *data, int len)
 {
   // I'm going to cheat and assume it comes in chunks.
   int i = 0;
-  char ch;
+  int ch;
   char text[1025];
   int text_len = 0;
 
