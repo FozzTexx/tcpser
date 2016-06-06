@@ -91,6 +91,11 @@ int line_connect(modem_config *cfg)
      * - gwb
      */
     send_nvt_command(cfg->line_data.fd, &cfg->line_data.nvt_data, NVT_WILL, NVT_OPT_ECHO);
+
+    /* If space parity is detected treat it as 8 bit and try to enable binary mode */
+    if (!cfg->parity)
+      send_nvt_command(cfg->line_data.fd, &cfg->line_data.nvt_data,
+		       NVT_WILL, NVT_OPT_TRANSMIT_BINARY);
     return 0;
   }
   else {
