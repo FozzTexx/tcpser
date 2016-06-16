@@ -120,7 +120,6 @@ void mdm_init_config(modem_config *cfg)
 
   dce_init_config(cfg);
   sh_init_config(cfg);
-  line_init_config(cfg);
 }
 
 int get_new_cts_state(modem_config *cfg, int up)

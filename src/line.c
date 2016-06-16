@@ -77,6 +77,10 @@ int line_connect(modem_config *cfg)
   char *addy = cfg->dialno;
 
 
+  /* Reset everything we know about the line, it may not be the same
+     as last time. */
+  line_init_config(cfg);
+  
   LOG(LOG_INFO, "Connecting");
   addy = pb_search(addy);
   cfg->line_data.fd = ip_connect(addy);
