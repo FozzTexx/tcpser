@@ -77,8 +77,7 @@ int line_connect(modem_config *cfg)
   char *addy = cfg->dialno;
 
 
-  /* Reset everything we know about the line, it may not be the same
-     as last time. */
+  /* Reset everything we know about the line, it may not be the same as last time. */
   line_init_config(cfg);
   
   LOG(LOG_INFO, "Connecting");
@@ -97,9 +96,12 @@ int line_connect(modem_config *cfg)
     send_nvt_command(cfg->line_data.fd, &cfg->line_data.nvt_data, NVT_WILL, NVT_OPT_ECHO);
 
     /* If space parity is detected treat it as 8 bit and try to enable binary mode */
-    if (!cfg->parity)
+    if (!cfg->parity) {
       send_nvt_command(cfg->line_data.fd, &cfg->line_data.nvt_data,
 		       NVT_WILL, NVT_OPT_TRANSMIT_BINARY);
+      send_nvt_command(cfg->line_data.fd, &cfg->line_data.nvt_data,
+		       NVT_DO, NVT_OPT_TRANSMIT_BINARY);
+    }
     return 0;
   }
   else {

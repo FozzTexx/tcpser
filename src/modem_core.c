@@ -186,7 +186,7 @@ void mdm_write(modem_config *cfg, char *data, int len)
   int i;
   unsigned int v;
 
-  
+
   if (cfg->allow_transmit == TRUE) {
     if (cfg->parity) {
       buf = malloc(len);
