@@ -53,7 +53,7 @@ int get_nvt_cmd_response(int action, int type)
   return rc;
 }
 
-int parse_nvt_subcommand(int fd, nvt_vars *vars, char *data, int len, int speed)
+int parse_nvt_subcommand(int fd, nvt_vars *vars, unsigned char *data, int len, int speed)
 {
   // overflow issue, again...
   nvtOption opt = data[2];

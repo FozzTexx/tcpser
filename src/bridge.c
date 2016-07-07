@@ -47,7 +47,7 @@ int accept_connection(modem_config *cfg)
   return 0;
 }
 
-int parse_ip_data(modem_config *cfg, char *data, int len)
+int parse_ip_data(modem_config *cfg, unsigned char *data, int len)
 {
   // I'm going to cheat and assume it comes in chunks.
   int i = 0;
@@ -114,7 +114,7 @@ int parse_ip_data(modem_config *cfg, char *data, int len)
     }
   }
   else {
-    mdm_write(cfg, data, len);
+    mdm_write(cfg, (char *) data, len);
   }
   return 0;
 }
@@ -163,7 +163,7 @@ void *ip_thread(void *arg)
           LOG(LOG_DEBUG, "Read %d bytes from socket", res);
           buf[res] = 0;
           log_trace(TRACE_IP_IN, buf, res);
-          parse_ip_data(cfg, buf, res);
+          parse_ip_data(cfg, (unsigned char *) buf, res);
         }
       }
       if (FD_ISSET(cfg->data.cp[1][0], &readfs)) {      // pipe

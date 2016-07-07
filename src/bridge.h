@@ -16,5 +16,5 @@
 #define MSG_NOTIFY 'N'
 
 int accept_connection(modem_config *);
-int parse_ip_data(modem_config *cfg, char *data, int len);
+int parse_ip_data(modem_config *cfg, unsigned char *data, int len);
 void *run_bridge(void *arg);
