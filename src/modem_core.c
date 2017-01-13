@@ -32,6 +32,9 @@ int mdm_init()
   mdm_responses[MDM_RESP_CONNECT_57600] = "CONNECT 57600";
   mdm_responses[MDM_RESP_CONNECT_115200] = "CONNECT 115200";
   mdm_responses[MDM_RESP_CONNECT_234000] = "CONNECT 230400";
+  mdm_responses[MDM_RESP_CUSTOM_PROTOCOL_RING] = "\xff\x01";
+  mdm_responses[MDM_RESP_CUSTOM_PROTOCOL_CONNECT] = "\xff\x02";
+  mdm_responses[MDM_RESP_CUSTOM_PROTOCOL_NO_CARRIER] = "\xff\x03";
   return 0;
 }
 
@@ -114,6 +117,7 @@ void mdm_init_config(modem_config *cfg)
   cfg->allow_transmit = TRUE;
   cfg->invert_dsr = FALSE;
   cfg->invert_dcd = FALSE;
+  cfg->custom_protocol = FALSE;
 
   cfg->config0[0] = '\0';
   cfg->config1[0] = '\0';
@@ -211,7 +215,6 @@ void mdm_send_response(int msg, modem_config *cfg)
 {
   char msgID[17];
 
-
   LOG(LOG_DEBUG, "Sending %s response to modem", mdm_responses[msg]);
   if (cfg->send_responses == TRUE) {
     mdm_write(cfg, cfg->crlf, 2);
@@ -271,6 +274,7 @@ int mdm_print_speed(modem_config *cfg)
 
   }
   mdm_send_response(get_connect_response(speed, cfg->response_code_level), cfg);
+  mdm_send_response(MDM_RESP_CUSTOM_PROTOCOL_CONNECT, cfg);
   return 0;
 }
 
@@ -314,6 +318,7 @@ int mdm_disconnect(modem_config *cfg)
     mdm_set_control_lines(cfg);
     if (type != MDM_CONN_NONE) {
       mdm_send_response(MDM_RESP_NO_CARRIER, cfg);
+      mdm_send_response(MDM_RESP_CUSTOM_PROTOCOL_NO_CARRIER, cfg);
       usleep(cfg->disconnect_delay * 1000);
     }
     cfg->rings = 0;
@@ -724,6 +729,7 @@ int mdm_send_ring(modem_config *cfg)
   LOG(LOG_DEBUG, "Sending 'RING' to modem");
   cfg->line_ringing = TRUE;
   mdm_send_response(MDM_RESP_RING, cfg);
+  mdm_send_response(MDM_RESP_CUSTOM_PROTOCOL_RING, cfg);
   cfg->rings++;
   LOG(LOG_ALL, "Sent #%d ring", cfg->rings);
   if (cfg->cmd_mode == FALSE || (cfg->s[0] != 0 && cfg->rings >= cfg->s[0])) {
