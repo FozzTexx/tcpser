@@ -3,16 +3,13 @@ This is yet another fork of Jim Brain's tcpser serial to IP modem emulation prog
 The original source code can be found here:
 http://www.jbrain.com/pub/linux/serial/
 
-My changes are based upon the rc12 archive dated 11Mar09.
+My changes are based upon FozzTexx's code which also includes changes by geneb.
 
-I fixed the bug with being unable to connect to real telnet servers.
+This fork is mainly to add a simple protocol to send connect and disconnect messages to the client.
+The purpose of doing so is to provide a simple technique for BBS programs running in the Vice emulator
+to detect when a call is answered or disconnected. Vice does not set the carrier detect or ring signals
+based on tcpser's connection status. BBS programs will have to be modified to detect the connect
+and disconnect messages coming from tcpser and respond accordingly.
 
-I also made the modem routines automatically detect parity. If even,
-odd, or mark parity is detected then the telnet connection will be
-limited to 7 bit. Space parity will be treated as 8N1 and will allow
-telnet binary mode.
+Kevin Umbach <kumbach@gmail.com>
 
-I also incorporated geneb's changes found at https://github.com/geneb/tcpser
-
-Chris Osborn <fozztexx@fozztexx.com>
-http://insentricity.com
