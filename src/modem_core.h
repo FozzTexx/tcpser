@@ -22,6 +22,9 @@
 #define MDM_RESP_CONNECT_57600 18
 #define MDM_RESP_CONNECT_115200 19
 #define MDM_RESP_CONNECT_234000 20
+#define MDM_RESP_CUSTOM_PROTOCOL_RING 21
+#define MDM_RESP_CUSTOM_PROTOCOL_NO_CARRIER 22
+#define MDM_RESP_CUSTOM_PROTOCOL_CONNECT 23
 
 #define MDM_CL_DSR_LOW 0
 #define MDM_CL_DSR_HIGH 1
@@ -146,6 +149,8 @@ typedef struct modem_config {
   char crlf[3];
   int parity;
   unsigned char pchars[3];
+  int custom_protocol;
+
 } modem_config;
 
 int mdm_init(void);

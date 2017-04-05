@@ -27,6 +27,7 @@ void print_help(char *name)
   fprintf(stderr, "  -s   serial port speed (defaults to 38400)\n");
   fprintf(stderr, "  -S   speed modem will report (defaults to -s value)\n");
   fprintf(stderr, "  -I   invert DCD pin\n");
+  fprintf(stderr, "  -P   use custom connection reporting protocol\n");
   fprintf(stderr, "  -n   add phone entry (number=replacement)\n");
   fprintf(stderr, "  -a   filename to send to local side upon answer\n");
   fprintf(stderr, "  -A   filename to send to remote side upon answer\n");
@@ -61,7 +62,7 @@ int init(int argc, char **argv, modem_config cfg[], int max_modem, char **ip_add
   cfg[0].dce_speed = 38400;
 
   while (opt > -1 && i < max_modem) {
-    opt = getopt(argc, argv, "p:s:S:d:v:hw:i:Il:L:t:n:a:A:c:C:N:B:T:D:");
+    opt = getopt(argc, argv, "p:s:S:d:v:hw:i:Il:L:t:n:a:A:c:C:N:B:T:D:P");
     switch (opt) {
     case 't':
       trace_flags = log_get_trace_flags();
@@ -177,6 +178,9 @@ int init(int argc, char **argv, modem_config cfg[], int max_modem, char **ip_add
     case 'D':
       cfg[i].data.direct_conn = TRUE;
       strncpy(cfg[i].data.direct_conn_num, optarg, sizeof(cfg[i].data.direct_conn_num));
+      break;
+    case 'P':
+      cfg[i].custom_protocol = TRUE;
       break;
     }
   }
