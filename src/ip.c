@@ -36,8 +36,7 @@ int ip_init_server_conn(char *ip_addr, int port)
 
     on = 1;
 
-    rc = setsockopt(sSocket, SOL_SOCKET, SO_REUSEADDR, (const char *) &on, sizeof(on)
-      );
+    rc = setsockopt(sSocket, SOL_SOCKET, SO_REUSEADDR, (const char *) &on, sizeof(on));
     if (-1 == rc) {
       ELOG(LOG_ERROR, "bind address checking could not be turned off");
     }
