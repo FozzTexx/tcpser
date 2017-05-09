@@ -151,7 +151,7 @@ int ser_get_control_lines(int fd)
 
 int ser_set_control_lines(int fd, int state)
 {
-  unsigned int status;
+  int status;
 
 
   if (0 > (status = ser_get_control_lines(fd))) {
