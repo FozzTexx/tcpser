@@ -338,9 +338,13 @@ void *run_bridge(void *arg)
     ptimer = NULL;
     if (cfg->cmd_mode == FALSE) {
       if (cfg->pre_break_delay == FALSE || cfg->break_len == 3) {
+	long long usec;
+
+	
         LOG(LOG_ALL, "Setting timer for break delay");
-        timer.tv_sec = 0;
-        timer.tv_usec = cfg->s[SRegisterGuardTime] * 20000;
+	usec = cfg->s[SRegisterGuardTime] * 20000;
+        timer.tv_sec = usec / 1000000;
+        timer.tv_usec = usec % 1000000;
         ptimer = &timer;
       }
       else if (cfg->pre_break_delay == TRUE && cfg->break_len > 0) {
