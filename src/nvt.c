@@ -4,7 +4,7 @@
 #include "ip.h"
 #include "nvt.h"
 
-int nvt_init_config(nvt_vars *vars)
+void nvt_init_config(nvt_vars *vars)
 {
   int i;
 
@@ -116,10 +116,11 @@ int parse_nvt_subcommand(int fd, nvt_vars *vars, unsigned char *data, int len, i
     resp[resp_len++] = NVT_SE;
     ip_write(fd, resp, resp_len);
   }
+
   return rc;
 }
 
-int send_nvt_command(int fd, nvt_vars *vars, char action, int opt)
+void send_nvt_command(int fd, nvt_vars *vars, char action, int opt)
 {
   char cmd[3];
 
@@ -131,10 +132,10 @@ int send_nvt_command(int fd, nvt_vars *vars, char action, int opt)
   ip_write(fd, cmd, 3);
   vars->term[opt] = action;
 
-  return 0;
+  return;
 }
 
-int parse_nvt_command(int fd, nvt_vars *vars, nvtCommand action, nvtOption opt, int parity)
+void parse_nvt_command(int fd, nvt_vars *vars, nvtCommand action, nvtOption opt, int parity)
 {
   char resp[3];
   int accept = FALSE;
@@ -148,27 +149,43 @@ int parse_nvt_command(int fd, nvt_vars *vars, nvtCommand action, nvtOption opt, 
     switch (action) {
     case NVT_DO:
       if (!parity) {
-	LOG(LOG_INFO, "Enabling telnet binary xmit");
-	vars->binary_xmit = TRUE;
-	accept = TRUE;
+	if (!vars->binary_xmit) {
+	  LOG(LOG_INFO, "Enabling telnet binary xmit");
+	  vars->binary_xmit = TRUE;
+	  accept = TRUE;
+	}
+	else
+	  return;
       }
       break;
     case NVT_DONT:
-      LOG(LOG_INFO, "Disabling telnet binary xmit");
-      vars->binary_xmit = FALSE;
-      accept = TRUE;
+      if (vars->binary_xmit) {
+	LOG(LOG_INFO, "Disabling telnet binary xmit");
+	vars->binary_xmit = FALSE;
+	accept = TRUE;
+      }
+      else
+	return;
       break;
     case NVT_WILL:
       if (!parity) {
-	LOG(LOG_INFO, "Enabling telnet binary recv");
-	vars->binary_recv = TRUE;
-	accept = TRUE;
+	if (!vars->binary_recv) {
+	  LOG(LOG_INFO, "Enabling telnet binary recv");
+	  vars->binary_recv = TRUE;
+	  accept = TRUE;
+	}
+	else
+	  return;
       }
       break;
     case NVT_WONT:
-      LOG(LOG_INFO, "Disabling telnet binary recv");
-      vars->binary_recv = FALSE;
-      accept = TRUE;
+      if (vars->binary_recv) {
+	LOG(LOG_INFO, "Disabling telnet binary recv");
+	vars->binary_recv = FALSE;
+	accept = TRUE;
+      }
+      else
+	return;
       break;
 
     default:
@@ -193,5 +210,5 @@ int parse_nvt_command(int fd, nvt_vars *vars, nvtCommand action, nvtOption opt, 
     break;
   }
   ip_write(fd, resp, 3);
-  return 0;
+  return;
 }
