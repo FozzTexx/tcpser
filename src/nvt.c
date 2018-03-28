@@ -14,7 +14,7 @@ void nvt_init_config(nvt_vars *vars)
   for (i = 0; i < 256; i++)
     vars->term[i] = 0;
 
-  return 0;
+  return;
 }
 
 int get_nvt_cmd_response(int action, int type)

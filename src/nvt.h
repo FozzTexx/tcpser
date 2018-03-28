@@ -1,4 +1,4 @@
-ifndef NVT_H
+#ifndef NVT_H
 #define NVT_H 1
 
 typedef enum {
@@ -52,6 +52,6 @@ extern void nvt_init_config(nvt_vars *vars);
 extern int get_nvt_cmd_response(int action, int type);
 extern int parse_nvt_subcommand(int fd, nvt_vars *vars, unsigned char *data, int len, int speed);
 extern void send_nvt_command(int fd, nvt_vars *vars, char action, int opt);
-extern int parse_nvt_command(int fd, nvt_vars *vars, nvtCommand action, nvtOption opt, int parity);
+extern void parse_nvt_command(int fd, nvt_vars *vars, nvtCommand action, nvtOption opt, int parity);
 
 #endif

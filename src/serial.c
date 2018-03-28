@@ -180,6 +180,7 @@ int ser_read(int fd, char *data, int len)
 {
   int res;
 
+
   res = read(fd, data, len);
   log_trace(TRACE_MODEM_IN, data, res);
   return res;

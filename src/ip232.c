@@ -19,7 +19,6 @@ void *ip232_thread(void *arg)
   modem_config *cfg = (modem_config *) arg;
   int accept_pending = FALSE;
   int rc;
-  int res = 0;
   char buf[256];
 
   fd_set readfs;
@@ -44,7 +43,7 @@ void *ip232_thread(void *arg)
     }
     else {
       if (FD_ISSET(cfg->dce_data.dp[1][0], &readfs)) {  // pipe
-        res = read(cfg->dce_data.dp[1][0], buf, sizeof(buf) - 1);
+        read(cfg->dce_data.dp[1][0], buf, sizeof(buf) - 1);
         LOG(LOG_DEBUG, "ip232 thread notified");
         accept_pending = FALSE;
       }
