@@ -31,7 +31,7 @@ int mdm_init()
   mdm_responses[MDM_RESP_CONNECT_38400] = "CONNECT 38400";
   mdm_responses[MDM_RESP_CONNECT_57600] = "CONNECT 57600";
   mdm_responses[MDM_RESP_CONNECT_115200] = "CONNECT 115200";
-  mdm_responses[MDM_RESP_CONNECT_234000] = "CONNECT 230400";
+  mdm_responses[MDM_RESP_CONNECT_230400] = "CONNECT 230400";
   return 0;
 }
 
