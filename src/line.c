@@ -20,7 +20,7 @@ int line_write(modem_config *cfg, char *data, int len)
   int retval;
   int i = 0;
   int double_iac = FALSE;
-  char text[1024];
+  unsigned char text[1024];
   int text_len = 0;
   int mask = 0x7f;
   int ch;

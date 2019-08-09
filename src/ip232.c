@@ -133,7 +133,7 @@ int ip232_get_control_lines(modem_config *cfg)
 int ip232_set_control_lines(modem_config *cfg, int state)
 {
   int dcd;
-  char cmd[2];
+  unsigned char cmd[2];
 
 
   if (cfg->dce_data.ip232_is_connected) {
@@ -148,12 +148,12 @@ int ip232_set_control_lines(modem_config *cfg, int state)
   return 0;
 }
 
-int ip232_write(modem_config *cfg, char *data, int len)
+int ip232_write(modem_config *cfg, unsigned char *data, int len)
 {
   int retval;
   int i = 0;
   int double_iac = FALSE;
-  char text[1024];
+  unsigned char text[1024];
   int text_len = 0;
 
 
@@ -187,11 +187,11 @@ int ip232_write(modem_config *cfg, char *data, int len)
   return retval;
 }
 
-int ip232_read(modem_config *cfg, char *data, int len)
+int ip232_read(modem_config *cfg, unsigned char *data, int len)
 {
   int res;
   int rc;
-  char buf[256];
+  unsigned char buf[256];
   int i = 0;
   int ch;
   int text_len = 0;

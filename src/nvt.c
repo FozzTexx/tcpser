@@ -19,7 +19,7 @@ void nvt_init_config(nvt_vars *vars)
 
 int get_nvt_cmd_response(int action, int type)
 {
-  char rc = 0;
+  unsigned char rc = 0;
 
 
   if (type == TRUE) {
@@ -57,8 +57,8 @@ int parse_nvt_subcommand(int fd, nvt_vars *vars, unsigned char *data, int len, i
 {
   // overflow issue, again...
   nvtOption opt = data[2];
-  char resp[100];
-  char *response = resp + 3;
+  unsigned char resp[100];
+  unsigned char *response = resp + 3;
   int resp_len = 0;
   int response_len = 0;
   char tty_type[] = "VT100";
@@ -86,14 +86,14 @@ int parse_nvt_subcommand(int fd, nvt_vars *vars, unsigned char *data, int len, i
       switch (opt) {
       case NVT_OPT_TERMINAL_TYPE:
         slen = strlen(tty_type);
-        strncpy(response + response_len, tty_type, slen);
+        strncpy((char *) response + response_len, tty_type, slen);
         response_len += slen;
         break;
 
       case NVT_OPT_TERMINAL_SPEED:
 	sprintf(buf, "%i,%i", speed, speed);
 	slen = strlen(buf);
-	strncpy(response + response_len, buf, slen);
+	strncpy((char *) response + response_len, buf, slen);
 	response_len += slen;
 	break;
 	
@@ -120,9 +120,9 @@ int parse_nvt_subcommand(int fd, nvt_vars *vars, unsigned char *data, int len, i
   return rc;
 }
 
-void send_nvt_command(int fd, nvt_vars *vars, char action, int opt)
+void send_nvt_command(int fd, nvt_vars *vars, unsigned char action, int opt)
 {
-  char cmd[3];
+  unsigned char cmd[3];
 
 
   cmd[0] = NVT_IAC;
@@ -137,7 +137,7 @@ void send_nvt_command(int fd, nvt_vars *vars, char action, int opt)
 
 void parse_nvt_command(int fd, nvt_vars *vars, nvtCommand action, nvtOption opt, int parity)
 {
-  char resp[3];
+  unsigned char resp[3];
   int accept = FALSE;
   
 
