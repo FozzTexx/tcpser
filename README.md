@@ -112,7 +112,7 @@ tcpser .... -nhome=jbrain.com:6400
 ```
 This is also useful for systems that do not accept non-numeric phone numbers:
 ```
-tcpser .... -n5551212=bestbbs.net
+tcpser .... -n9169651701=bbs.fozztexx.com
 ```
 One can even "hide" a regular IP address or DNS entry by aliasing it to
 something else:
