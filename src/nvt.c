@@ -120,7 +120,7 @@ int parse_nvt_subcommand(int fd, nvt_vars *vars, unsigned char *data, int len, i
   return rc;
 }
 
-void send_nvt_command(int fd, nvt_vars *vars, unsigned char action, int opt)
+void send_nvt_command(int fd, nvt_vars *vars, int action, int opt)
 {
   unsigned char cmd[3];
 

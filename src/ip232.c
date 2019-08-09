@@ -157,7 +157,7 @@ int ip232_write(modem_config *cfg, unsigned char *data, int len)
   int text_len = 0;
 
 
-  log_trace(TRACE_MODEM_OUT, data, len);
+  log_trace(TRACE_MODEM_OUT, (char *) data, len);
   retval = len;
   if (cfg->dce_data.ip232_is_connected) {
     while (i < len) {
@@ -191,7 +191,7 @@ int ip232_read(modem_config *cfg, unsigned char *data, int len)
 {
   int res;
   int rc;
-  unsigned char buf[256];
+  char buf[256];
   int i = 0;
   int ch;
   int text_len = 0;

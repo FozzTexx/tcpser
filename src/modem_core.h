@@ -145,7 +145,7 @@ typedef struct modem_config {
   int disconnect_delay;
   char crlf[3];
   int parity;
-  unsigned char pchars[3];
+  char pchars[3];
 } modem_config;
 
 int mdm_init(void);

@@ -12,6 +12,6 @@ extern int ip_connect(char addy[]);
 extern int ip_accept(int sSocket);
 extern int ip_disconnect(int fd);
 extern int ip_write(int fd, unsigned char *data, int len);
-extern int ip_read(int fd, unsigned char *data, int len);
+extern int ip_read(int fd, char *data, int len);
 
 #endif

@@ -163,9 +163,9 @@ int ip_disconnect(int fd)
   return 0;
 }
 
-int ip_write(int fd, char *data, int len)
+int ip_write(int fd, unsigned char *data, int len)
 {
-  log_trace(TRACE_IP_OUT, data, len);
+  log_trace(TRACE_IP_OUT, (char *) data, len);
   return write(fd, data, len);
 }
 

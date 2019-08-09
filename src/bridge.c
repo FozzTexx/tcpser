@@ -114,7 +114,7 @@ int parse_ip_data(modem_config *cfg, unsigned char *data, int len)
     }
   }
   else {
-    mdm_write(cfg, (char *) data, len);
+    mdm_write(cfg, data, len);
   }
   return 0;
 }
@@ -127,7 +127,7 @@ void *ip_thread(void *arg)
   fd_set readfs;
   int max_fd;
   int res = 0;
-  char buf[256];
+  unsigned char buf[256];
   int rc;
 
 
@@ -162,8 +162,8 @@ void *ip_thread(void *arg)
         else {
           LOG(LOG_DEBUG, "Read %d bytes from socket", res);
           buf[res] = 0;
-          log_trace(TRACE_IP_IN, buf, res);
-          parse_ip_data(cfg, (unsigned char *) buf, res);
+          log_trace(TRACE_IP_IN, (char *) buf, res);
+          parse_ip_data(cfg, buf, res);
         }
       }
       if (FD_ISSET(cfg->data.cp[1][0], &readfs)) {      // pipe
@@ -248,7 +248,7 @@ void *run_bridge(void *arg)
   int max_fd = 0;
   fd_set readfs;
   int res = 0;
-  char buf[256];
+  unsigned char buf[256];
   int rc = 0;
 
   int last_conn_type;
@@ -405,7 +405,7 @@ void *run_bridge(void *arg)
           mdm_send_response(MDM_RESP_OK, cfg);
         }
         else {
-          mdm_parse_data(cfg, buf, res);
+          mdm_parse_data(cfg, (char *) buf, res);
         }
       }
 

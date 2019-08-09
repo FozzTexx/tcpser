@@ -59,7 +59,7 @@ int line_write(modem_config *cfg, char *data, int len)
     return retval;
   }
 
-  return ip_write(cfg->line_data.fd, data, len);
+  return ip_write(cfg->line_data.fd, (unsigned char *) data, len);
 }
 
 int line_listen(modem_config *cfg)

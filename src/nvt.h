@@ -45,13 +45,13 @@ typedef enum {
 typedef struct nvt_vars {
   int binary_xmit;
   int binary_recv;
-  unsigned char term[256];
+  char term[256];
 } nvt_vars;
 
 extern void nvt_init_config(nvt_vars *vars);
 extern int get_nvt_cmd_response(int action, int type);
 extern int parse_nvt_subcommand(int fd, nvt_vars *vars, unsigned char *data, int len, int speed);
-extern void send_nvt_command(int fd, nvt_vars *vars, unsigned char action, int opt);
+extern void send_nvt_command(int fd, nvt_vars *vars, int action, int opt);
 extern void parse_nvt_command(int fd, nvt_vars *vars, nvtCommand action, nvtOption opt, int parity);
 
 #endif

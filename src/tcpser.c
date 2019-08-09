@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
           cSocket = ip_accept(sSocket);
           if (cSocket > -1) {
             if (strlen(all_busy) < 1) {
-              ip_write(cSocket, (char *) MDM_BUSY, strlen(MDM_BUSY));
+              ip_write(cSocket, (unsigned char *) MDM_BUSY, strlen(MDM_BUSY));
             }
             else {
               writeFile(all_busy, cSocket);

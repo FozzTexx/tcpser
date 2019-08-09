@@ -139,7 +139,7 @@ int dce_check_control_lines(modem_config *cfg)
   return new_status;
 }
 
-int dce_write(modem_config *cfg, char data[], int len)
+int dce_write(modem_config *cfg, unsigned char data[], int len)
 {
   if (cfg->dce_data.is_ip232) {
     return ip232_write(cfg, data, len);
@@ -147,7 +147,7 @@ int dce_write(modem_config *cfg, char data[], int len)
   return ser_write(cfg->dce_data.fd, data, len);
 }
 
-int dce_read(modem_config *cfg, char data[], int len)
+int dce_read(modem_config *cfg, unsigned char data[], int len)
 {
   if (cfg->dce_data.is_ip232) {
     return ip232_read(cfg, data, len);
