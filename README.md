@@ -39,6 +39,7 @@ TCPSER is distributed under the GPL 2.0 or later
 Simply untar the archive into a directory, and use the appropriate make command
 generate the exectutable.  If unsure, try the default make command first.
 
+| OS                  | Command                    |
 |---------------------|----------------------------|
 | Default/Linux/macOS | `make`                     |
 | Solaris             | `make -f Makefile.solaris` |
@@ -86,11 +87,13 @@ tcpser -h will provide additional information
 
 tcpser can be configured to send the contents of a file upon:
 
-connect               ; -c -C
-answer                ; -a -A
-no-answer             ; -I
-busy                  ; -B
-inactivity-timeout    ; -T
+| Event              | Flags |
+|--------------------|-------|
+| connect            | -c -C |
+| answer             | -a -A |
+| no-answer          | -I    |
+| busy               | -B    |
+| inactivity-timeout | -T    |
 
 For connect and answer, there are separate options for sending a file to the
 local serial connection (-c, -a) and the remote IP connection (-C, -A).  
@@ -130,15 +133,17 @@ errors.
 
 Examples:
 
-ats0=1                ; set number of rings to answer
-ata                   ; answer the line
-ath0                  ; hang up
-ats12?                ; query S register 12
-ate0                  ; turn off echo
-at&k3                 ; set flow control to RTS/CTS
-atdtjbrain.com:6400   ; "dial" jbrain.com, port 6400 (defaults to port 23)
-atdl                  ; "dial" last number
-a/                    ; repeat last command
+| Command             | Effect                                             |
+|---------------------|----------------------------------------------------|
+| ats0=1              | set number of rings to answer                      |
+| ata                 | answer the line                                    |
+| ath0                | hang up                                            |
+| ats12?              | query S register 12                                |
+| ate0                | turn off echo                                      |
+| at&k3               | set flow control to RTS/CTS                        |
+| atdtjbrain.com:6400 | "dial" jbrain.com, port 6400 (defaults to port 23) |
+| atdl                | "dial" last number                                 |
+| a/                  | repeat last command                                |
 
 Commands can be chained, as on a regular modem:
 ```
@@ -161,20 +166,20 @@ this also prevents normal operation of the DCD line, which is needed by some
 BBS systems.  A more permanent solution is to construct a modified null-modem
 cable or modify an existing cable to the following specifications:
 
-PC      Target
-
-CTS-----RTS
-RTS-----CTS
-SND-----RCV
-RCV-----SND
-
-DTR-----DCD
-
-DCD-+-+-DTR
-    | |
-DSR-+ +-DSR
-
-GND-----GND
+    PC      Target
+    
+    CTS-----RTS
+    RTS-----CTS
+    SND-----RCV
+    RCV-----SND
+    
+    DTR-----DCD
+    
+    DCD-+-+-DTR
+        | |
+    DSR-+ +-DSR
+    
+    GND-----GND
 
 This differs from a regular null-modem cable in that the target machine has DSR
 looped to DTR, not to DCD.  Note that this cable is directional.  
@@ -183,13 +188,13 @@ Normally, the target machine will configure DSR to float to a high state if
 unconnected.  As well, PCs do not require a valid DSR line for operation.  Thus,
 a simpler cable can be constructed that is bi-directional:
 
-CTS-----RTS
-RTS-----CTS
-SND-----RCV
-RCV-----SND
-DTR-----DCD
-DCD-----DTR
-GND-----GND
+    CTS-----RTS
+    RTS-----CTS
+    SND-----RCV
+    RCV-----SND
+    DTR-----DCD
+    DCD-----DTR
+    GND-----GND
 
 Unless there are issues, we recommend this simplified version, as it can be 
 installed in either direction.  
@@ -198,7 +203,7 @@ As an even simpler solution, many have simply taken a normal rs232 DE-9F to
 DE-9M cable and removed pin 6 from the male end (DSR).  This is fine, but the
 cable must be installed between the null modem adapter and the target machine:
 
-PC ----- null-modem adapter ----- cable with pin 6 removed ------ target machine
+    PC ----- null-modem adapter ----- cable with pin 6 removed ------ target machine
 
 Any other configuration will not work correctly.
 
@@ -232,10 +237,10 @@ exit 0
 ```
 This has been tested on the following platforms:
 
-Linux 2.4.20-8
-Windows XP
-Windows XP SP1
-Slackware 10.0
+* Linux 2.4.20-8
+* Windows XP
+* Windows XP SP1
+* Slackware 10.0
 
 Help:
 
