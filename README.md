@@ -39,9 +39,10 @@ TCPSER is distributed under the GPL 2.0 or later
 Simply untar the archive into a directory, and use the appropriate make command
 generate the exectutable.  If unsure, try the default make command first.
 
-Default/Linux:  make
-Solaris:        make -f Makefile.solaris
-*BSD:           gmake
+|---------------------|----------------------------|
+| Default/Linux/macOS | `make`                     |
+| Solaris             | `make -f Makefile.solaris` |
+| *BSD                | `gmake`                    |
 
 ### Windows 95/OSR2/98/SE/ME/NT/2000/XP/2003
 
