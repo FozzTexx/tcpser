@@ -36,7 +36,7 @@ TCPSER is distributed under the GPL 2.0 or later
 
 ### UNIX/Linux/BSD/macOS
 
-Simply untar the archive into a directory, and use the appropriate make command
+Simply clone the repository, and use the appropriate make command
 generate the exectutable.  If unsure, try the default make command first.
 
 | OS                  | Command                    |
@@ -46,10 +46,6 @@ generate the exectutable.  If unsure, try the default make command first.
 | *BSD                | `gmake`                    |
 
 ### Windows 95/OSR2/98/SE/ME/NT/2000/XP/2003
-
-The application archive contains a pregenerated Windows 32 bit executable 
-(tcpser.exe).  No compilation should be required, though the GNU toolchain and 
-the CYGWIN POSIX libraries can be used to regenerate the executable if desired:
 
 Win32:  make -f Makefile.win32
 
