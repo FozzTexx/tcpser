@@ -48,7 +48,7 @@ int line_write(modem_config *cfg, char *data, int len)
 	  i++;
         }
       }
-      if (text_len == sizeof(text_len)) {
+      if (text_len == sizeof(text)) {
         retval = ip_write(cfg->line_data.fd, text, text_len);
         text_len = 0;
       }

@@ -151,7 +151,7 @@ ats0=1z&c1&k3%f0s3=13dtjbrain.com
 ```
 tcpser supports the Hayes break sequence semantics, so +++ should operate
 correctly, even if the sequence of characters is used in normal data 
-transmissions.i
+transmissions.
 
 ## Cable
 
@@ -161,7 +161,7 @@ target system.  On a normal null-modem cable, DTR is mapped to DCD/DSR, which
 implies DSR will also reflect the state of DCD on the target machine.  However,
 some systems (notably those utilizing the 6551 ACIA communication IC) will not 
 transmit unless DSR is held high.  In this case, a quick qorkaround is to force
-DCD to be held high by adding -i"&c0" to the tcpser parameter list.  However,
+DCD to be held high by adding `-i"&c0"` to the tcpser parameter list.  However,
 this also prevents normal operation of the DCD line, which is needed by some
 BBS systems.  A more permanent solution is to construct a modified null-modem
 cable or modify an existing cable to the following specifications:
