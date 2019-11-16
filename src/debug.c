@@ -59,7 +59,7 @@ int log_get_trace_flags()
 void log_trace(int type, char *line, int len)
 {
   int i = 0;
-  int ch;
+  unsigned int ch;
   char data[64] = "\0";
   char *dptr = NULL;
   char text[17];
@@ -76,7 +76,7 @@ void log_trace(int type, char *line, int len)
         dptr = data;
         sprintf(dptr, "%4.4x|", i);
       }
-      ch = line[i];
+      ch = ((unsigned char *) line)[i];
       sprintf(dptr + 5 + ((i % 16) * 3), "%2.2x", ch);
       if (ch > 31 && ch < 127) {
         text[i % 16] = ch;
