@@ -567,20 +567,17 @@ int mdm_parse_cmd(modem_config *cfg)
 int detect_parity(modem_config *cfg)
 {
   int parity, eobits;
-  int charA, charT, charCR;
+  int charA, charT;
 
 
   charA = cfg->pchars[0];
   charT = cfg->pchars[1];
-  charCR = cfg->pchars[2];
   
   parity = (charA & 0x80) >> 7;
   parity |= (charT & 0x80) >> 6;
-  parity |= (charCR & 0x80) >> 5;
 
   eobits = gen_parity(charA & 0x7f);
   eobits |= gen_parity(charT & 0x7f) << 1;
-  eobits |= gen_parity(charCR & 0x7f) << 2;
 
   if (parity == eobits)
     return 2;
