@@ -16,12 +16,16 @@ int ser_get_bps_const(int speed)
   LOG(LOG_DEBUG, "Checking speed: %d", speed);
 
   switch (speed) {
+#ifdef B921600
   case 921600:
     bps_rate = B921600;
     break;
+#endif
+#ifdef B460800
   case 460800:
     bps_rate = B460800;
     break;
+#endif
   case 230400:
     bps_rate = B230400;
     break;
