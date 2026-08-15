@@ -436,7 +436,7 @@ int mdm_parse_cmd(modem_config *cfg)
     case 'I':  // Information.
       break;
     case 'L':  // Speaker volume
-      if (num < 1 || num > 3)
+      if (num > 3)
         cmd = AT_CMD_ERR;
       else {
         //cfg->volume=num;
@@ -562,6 +562,13 @@ int mdm_parse_cmd(modem_config *cfg)
       default:
         cmd = AT_CMD_ERR;
         break;
+      }
+      break;
+    case AT_CMD_FLAG_EXT + 'H':
+      if (num > 2) {
+        cmd = AT_CMD_ERR;
+      } else {
+        mdm_help_page(cfg, num);
       }
       break;
     default:
@@ -735,4 +742,14 @@ int mdm_send_ring(modem_config *cfg)
     mdm_answer(cfg);
   }
   return 0;
+}
+
+void mdm_help_page(modem_config *cfg, int page)
+{
+  //send the lines of the help page with the curly fries
+  const char **lines = help_pages[page];
+  for (int i = 0; lines[i] != NULL; i++) {
+    mdm_write(cfg, (unsigned char *) lines[i], strlen(lines[i]));
+    mdm_write(cfg, (unsigned char *) cfg->crlf, strlen(cfg->crlf));
+  }
 }

@@ -170,6 +170,119 @@ int mdm_clear_break(modem_config *cfg);
 int mdm_parse_data(modem_config *cfg, char *data, int len);
 int mdm_handle_timeout(modem_config *cfg);
 int mdm_send_ring(modem_config *cfg);
+void mdm_help_page(modem_config *cfg, int page);
+
+//HELP PAGES for AT&H, formatted for 40 columns
+static const char *help_main[] = {
+  "HELP: MAIN",
+  "",
+  "tcpser supports the following AT cmds",
+  "",
+  "CMD PARAMS      DESCRIPTION",
+  "---------------------------------------",
+  "A   any         answer call",
+  "B	0,1         unused, returns OK",
+  "D 	T,P,L       dial (see DIALING)",
+  "E	0,1         cmd echo (0=off,1=on)",
+  "H	none,0,1    hook switch",
+  "                 none or 0=hang up,",
+  "                 1=pick up [same as A])",
+  "L	1-3         unused, returns OK",
+  "M	0-2         unused, returns OK",
+  "N	0,1         unused, returns OK",
+  "O   any         switch to online state",
+  "                 (in tcpser, same as A)",
+  "Q	0-2         unused, reutrns OK",
+  "S	varies      see S REGISTERS",
+  "V	0,1         unused, returns OK",
+  "W	0-2         unused, returns OK",
+  "X	0-4         unused, returns OK",
+  "Y	0,1         unused, returns OK",
+  "Z	0,1         unused, returns OK",
+  "",
+  "A/  none        repeat last command",
+  "",
+  "&C  0,1         force DCD (0=on, 1=off)",
+  "&K  0,3-6       flow control",
+  "                 0=none",
+  "                 3=RTS/CTS",
+  "                 4,5=XON/XOFF",
+  "                 6=RTS/CTS & XON/XOFF",
+  "&H  none,0,1    help",
+  "                 none or 0=MAIN",
+  "                 1=DIAL MODES",
+  "                 2=S REGISTERS",
+  "&Z	none        unused, returns OK",
+  "",
+  "The following will also return OK to",
+  "help compatibility with older hardware:",
+  "",
+  "- any single character not listed",
+  "  above, optionally followed by any",
+  "  number of numerals",
+  "- any & cmd not listed above",
+  "- any 2 letter cmds using %,\\,:,-",
+  0
+};
+
+static const char *help_dial[] = {
+  "HELP: DIALING",
+  "---------------------------------------",
+  "A normal Hayes dial command looks like:",
+  "",
+  "ATDxnnnn",
+  "",
+  "where x is optional and specifies dial",
+  "type (has no effect in tcpser), and",
+  "nnnn is the sequence to be dialed,",
+  "composed of digits and various",
+  "characters for control operations (the",
+  "latter are unsupported).",
+  "",
+  "tcpser dialing types",
+  "--------------------",
+  "T   tone (has no meaning for tcpser)",
+  "P   pulse (has no meaning for tcpser)",
+  "L   dial last \"number\" if nnnn is =",
+  "    omitted, otherwise ignored",
+  "",
+  "In tcpser, the \"number\" to dial (in the",
+  "example above, the nnnn portion) can be",
+  "either:",
+  "",
+  "- a phone number from the phone book",
+  "- an IP address or FQDN, optionally",
+  "  followed by :mmmm where mmmm is a",
+  "  port number",
+  0
+};
+
+static const char *help_regs[] = {
+  "HELP: S REGISTERS",
+  "---------------------------------------",
+  "tcpser has S registers from 1 to 99.",
+  "Only the ones listed below are used.",
+  "",
+  "#   DEFAULT     DESCRIPTION",
+  "---------------------------------------",
+  "2   43          escape code character",
+  "3   13          CR character",
+  "4   10          LF character",
+  "5   8           backspace character",
+  "12  50          guard time",
+  "",
+  "To query a register: ATS#?",
+  "To set a register: ATS#=value",
+  " where value is 0-255. Note that",
+  " omitting value is the same as 0.",
+  0
+};
+
+static const char **help_pages[] = {
+  help_main,
+  help_dial,
+  help_regs
+};
 
 #include "line.h"
 #include "shared.h"
